@@ -137,3 +137,57 @@ Monte Python
   - Brinckmann, T. and Lesgourgues, J., “MontePython 3: Boosted MCMC sampler and other features”, Physics of the Dark Universe, vol. 24, 2019. [doi:10.1016/j.dark.2018.100260](https://www.sciencedirect.com/science/article/abs/pii/S2212686418302309).
   - Audren, B., Lesgourgues, J., Benabed, K., and Prunet, S., “Conservative constraints on early cosmology with MONTE PYTHON”, Journal of Cosmology and Astroparticle Physics, vol. 2013, no. 2, 2013. [doi:10.1088/1475-7516/2013/02/001](https://iopscience.iop.org/article/10.1088/1475-7516/2013/02/001).
 
+Setting up Planck Likelihood
+==================
+  The Planck 2018 data can be found on the [Planck Legacy Archive](http://pla.esac.esa.int/pla/#home). The Planck Likelihood Code (plc) is based on a library called `clik`. It will be extracted, alongside several `clik` folders that contain the likelihoods. The code uses an auto installer device, called `waf`. \
+Here is the detail of the full installation.
+  Next, create a directory which you want to store Planck data, and go into that directory
+  ```Linux
+  mkdir -p path/to/planck && cd $_
+  ```
+  Download the code and baseline data (will need 300 Mb of space)
+  ```Linux
+  wget -O COM_Likelihood_Code-v3.0_R3.01.tar.gz "http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Code-v3.0_R3.01.tar.gz"
+  wget -O COM_Likelihood_Data-baseline_R3.00.tar.gz  "http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz"
+  ```
+  Uncompress the code and the likelihood, and do some clean-up
+  ```Linux
+  tar -xvzf COM_Likelihood_Code-v3.0_R3.01.tar.gz
+  tar -xvzf COM_Likelihood_Data-baseline_R3.00.tar.gz
+  rm COM_Likelihood_*tar.gz
+  ```
+  Move into the code directory
+  ```Linux
+  cd code/plc_3.0/plc-3.01
+  ```
+  Configure the code. Note that you are **strongly advised** to configure clik with the Intel mkl library, and not with lapack. There is a massive gain in execution time: without it, the code is dominated by the execution of the low-l polarisation data. Before the next step, ensure you do NOT have any old Planck likelihoods sourced!
+  ```Linux
+  ./waf configure --lapack_mkl=${MKLROOT} --install_all_deps
+  ```
+  If everything goes well, you will be ready to install the code
+  ```Linux
+  ./waf install
+  ```
+  Next, source the likelihood. If you are running on a shell, type the command
+  ```Linux
+  source bin/clik_profile.sh
+  ```
+  Running on a z-shell, you will first need to create a .zsh version of the above file. This can be done in many ways, for example
+  ```Linux
+  cp bin/clik_profile.sh bin/clik_profile.zsh
+  sed -i 's/addvar PATH /PATH=$PATH:/g' bin/clik_profile.zsh
+  sed -i 's/addvar PYTHONPATH /PYTHONPATH=$PYTHONPATH:/g' bin/clik_profile.zsh
+  sed -i 's/addvar LD_LIBRARY_PATH/LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/g' bin/clik_profile.zsh
+  source bin/clik_profile.zsh
+  ```
+  You need to add
+  ```Linux
+  source /path/to/planck/code/plc_3.0/plc-3.01/bin/clik_profile.sh
+  ```
+  to your `.shellrc` (or the `.zsh` to your `.zshrc` on a z-shell), and you should put it in your scripts for cluster computing. \
+  After successfully installing Planck likelihoods, in MontePython configuration file, you will need to add
+  ```Linux
+  path['clik'] = '/path/to/planck/code/plc_3.0/plc-3.01'
+  ```
+  There are nine Planck 2018 likelihoods defined in *Monte Python*: 'Planck_highl_TT', 'Planck_highl_TT_lite', 'Planck_highl_TTTEEE', 'Planck_highl_TTTEEE_lite', 'Planck_lensing', 'Planck_lowl_TT', 'Planck_lowl_EE', 'Planck_lowl_EEBB', 'Planck_lowl_BB', as well as five sets of parameter files, bestfit files, and covmats.
+
