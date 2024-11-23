@@ -56,7 +56,7 @@ CLASS Installation
   ```
   We can also download `CLASS` directly from [Github](https://github.com/).
   <p align="center">  
-  <img src="" height="700px"  align="center" >
+  <img src="https://github.com/user-attachments/assets/d21381d5-8094-45aa-9bf0-5260ea5dd80f" height="500px"  width="1200px"   align="center" >
   </p>
 
 ### 3. Installing CLASS
