@@ -56,7 +56,7 @@ CLASS Installation
   ```
   We can also download `CLASS` directly from [Github](https://github.com/).
   <p align="center">  
-  <img src="https://github.com/user-attachments/assets/d21381d5-8094-45aa-9bf0-5260ea5dd80f" height="500px"  width="1200px"   align="center" >
+  <img src="https://github.com/user-attachments/assets/d21381d5-8094-45aa-9bf0-5260ea5dd80f" height="500px"  width="1000px"   align="center" >
   </p>
 
 ### 3. Installing CLASS
@@ -64,10 +64,16 @@ CLASS Installation
   ```Linux
   make -j
   ```
-  Mac users may have to install `command line tool for xcode` by going to the site: [https://developer.apple.com/download/all/](https://developer.apple.com/download/all/) (sign in is required), click download `Command Line Tools for XCode`. Execute the command
+  Mac users may have to install `Command Line Tool for XCode` by going to the site: [https://developer.apple.com/download/all/](https://developer.apple.com/download/all/) (sign in is required), click download `Command Line Tools for XCode`. 
+  <p align="center">  
+  <img src="https://github.com/user-attachments/assets/ba404089-ca72-4b7f-b4d0-961290975745" height="400px"  width="800px"   align="center" >
+  </p>
+  Execute the command
+  
   ```Linux
   ./class explanatory.ini
   ```
+
   to test if the `C` code installed successfully.
 
 ### 4. Setting Python wrapper
@@ -81,3 +87,53 @@ CLASS Installation
   $ python
   >>> from classy import Class
   ```
+
+Monte Python
+==================
+### 1. Getting Monte Python
+  MontePython can be downloaded by
+  ```Linux
+  git clone https://github.com/brinckmann/montepython_public.git
+  ```
+  You need the Python program version 2.7.x** or version 3.x**. Your Python must have ‘numpy‘ (version >= 1.4.1) and ‘Cython’. The last one is used to wrap CLASS in Python. \
+  Optional: If you want to use the plotting capabilities of Monte Python fully, you also need the ‘scipy’, with interpolate, and ‘matplotlib’ modules. \
+  After installation, go to the directory:
+  ```Linux
+  cd montepython_public
+  ```
+  Make a copy of the file `default.conf.template` and rename it to `default.conf` (or any name your prefer)
+  ```Linux
+  cp default.conf.template default.conf
+  ```
+  At minimum, the file `default.cof` needs one line:
+  ```Linux
+  path['cosmo'] = path/to/your/class_public
+  ```
+  Make sure that your `CLASS` directory has the same name as in the path.
+  Now the code is installed. There are two main (optional) commands in `MontePython`: the first one is run, for running MCMC to generate chains, another one is info, for analysing chains. More information can be viewed by executing
+  ```Linux
+  python montepython/MontePython.py --help
+  python montepython/MontePython.py run --help
+  python montepython/MontePython.py info --help
+  ```
+  To test a small running, executing:
+  ```Linux
+  path['cosmo'] = path/to/your/class_public
+  ```
+  To get running, type:
+  ```Linux
+  python montepython/MontePython.py run -o test -p example.param
+  ```
+  If the directory `test/` doesn’t exist, it will be created, and a run with the number of steps described in `example.param` will be started. To run a chain with more steps, one can type:
+  ```Linux
+  python montepython/MontePython.py run -o test -p example.param -N 100
+  ```
+  To analyse the chains, type
+  ```Linux
+  python montepython/MontePython.py info test/
+  ```
+  For more information, see [https://baudren.github.io/montepython.html](https://baudren.github.io/montepython.html). The documentation can be found in this link. \
+  The MontePython papers can be found as
+  - Brinckmann, T. and Lesgourgues, J., “MontePython 3: Boosted MCMC sampler and other features”, Physics of the Dark Universe, vol. 24, 2019. [doi:10.1016/j.dark.2018.100260](https://www.sciencedirect.com/science/article/abs/pii/S2212686418302309).
+  - Audren, B., Lesgourgues, J., Benabed, K., and Prunet, S., “Conservative constraints on early cosmology with MONTE PYTHON”, Journal of Cosmology and Astroparticle Physics, vol. 2013, no. 2, 2013. [doi:10.1088/1475-7516/2013/02/001](https://iopscience.iop.org/article/10.1088/1475-7516/2013/02/001).
+
