@@ -12,16 +12,52 @@ CLASS Installation
 ==================
 ### 1. Pre-requisites
 - Mac Users
-  `gcc` can be installed via [Homebrew](https://brew.sh/), following the command
+  Mac users may have to install the Command Line Tools for Xcode in order
+to use the commands like `gcc`, `git` or `make` or package management tools like
+Homebrew. You can check if the Command Line Tools have already installed
+to your system or not by open the terminal and run
+  ```Linux
+  xcode-select -p
+  ```
+  If they are already installed, it should return a path like /Library/Develop-
+er/CommandLineTools. If not, you can install them manually by running the
+following command
+  ```Linux
+  xcode-select --install
+  ```
+  Alternatively you can download the Command Line Tools by going to the site:
+  [https://developer.apple.com/download/all/](https://developer.apple.com/download/all/) (sign in is required), click download
+  Command Line Tools for XCode. \
+  Next step, you need to install Homebrew in the system. Homebrew can be
+  downloaded it by typing this command on the terminal
+  ```Linux
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  ```
+  After that, you will need to install a C-language compiler such as `GCC` (Gnu
+  Compiler Collection), which is commonly used as a compiler with support for
+  `C`, `C++`, `Fortran`, etc. `GCC` can be installed by compiling.
   ```Linux
   brew install gcc
   ```
-  Next, we must install `Cython` which can be installed via
+  To make sure that CGG works properly, run
   ```Linux
-  pip install Cython
+  gcc --version
+  ```
+  Next step, check for the python version with
+  ```Linux
+  python --version
+  ```
+  Python wrapper for class may not yet be compatible with Python version ¿
+  3.11, so we have to specify version of Python in order to set up the wrapper. In
+  this note we will use Python v.3.11. Next step, we need to install Cython. This
+  allows Python code to directly call the C functions in CLASS. To install Cython
+  that associate with the Python v.3.11, use the command below.
+  ```Linux
+  python3.11 -m pip install Cython
   ```
 
-- Linux Users
+
+- Linux Users \
   You need to have `gcc` compiler `Python`, and `Cython`. To install `gcc` use the following commands,
   ```Linux
   sudo apt update
@@ -50,7 +86,13 @@ CLASS Installation
   conda install Cython
   ```
 ### 2. Downloading CLASS
-  We can get the lastest version of `CLASS` by downloadinbg via `git` using the command
+  Before getting CLASS, you may create a project directory using
+  ```Linux
+  mkdir <dirname> && cd $_
+  ```
+  Replace <dirname> with the name you prefer. After entering the <dirname>
+directory, download the latest version of `CLASS` by downloading via git using
+the command
   ```Linux
   git clone https://github.com/lesgourg/class_public.git
   ```
@@ -60,34 +102,67 @@ CLASS Installation
   </p>
 
 ### 3. Installing CLASS
-  Go to `CLASS` directly via terminal. Compile `C` code and `Python` wrapper using the command
+  Enter `CLASS` directory. Compile Ccode and Pythonwrapper using the command.
+  ```Linux
+  PYTHON=python3.11 make all
+  ```
+  or
   ```Linux
   make -j
   ```
-  Mac users may have to install `Command Line Tool for XCode` by going to the site: [https://developer.apple.com/download/all/](https://developer.apple.com/download/all/) (sign in is required), click download `Command Line Tools for XCode`. 
-  <p align="center">  
-  <img src="https://github.com/user-attachments/assets/ba404089-ca72-4b7f-b4d0-961290975745" height="400px"  width="800px"   align="center" >
-  </p>
-  Execute the command
-  
+  If you have no multiple versions of Python. Execute the command.   
   ```Linux
   ./class explanatory.ini
   ```
+  to test if the `C` code installed successfully. To test if the Python wrapper setup successfully, compile.
+  ```Linux
+  python3.11 -c "import classy; print(classy.__version__)"
+  ```
 
-  to test if the `C` code installed successfully.
-
-### 4. Setting Python wrapper
-  In the `CLASS` directory, go to the `python` directory and execute the command:
+### 4. Setting Python wrapper in a virtual environment
+  Create a virtual environment (venv) using  
+  ```Linux
+  python3.11 -m venv <myenv>
+  ```
+  You can replace `<myenv>` with any name you want. Then activate the virtual
+environment with  
+```Linux
+  source <myenv>/bin/activate
+  ```
+  To make sure that whenever the command python is compiled it point to the
+correct version of Python as you included in the virtual environment, you can
+place the function below in .bashrc or .zshrc for z-shell (if you don’t have
+.bashrc or .zshrc, just create one).
+  ```Linux
+  function venv() {
+    source "$1/bin/activate"  
+    alias python="$1/bin/python"
+    alias pip="$1/bin/pip"
+  }
+  ```
+  Then restart the terminal. Activate the virtual environment again. Now you
+can test if the command python points to the same version of Python using in
+the virtual environment by compiling.
+  ```Linux
+  which python; which pip
+  ```
+  Or, check for the version of Python.
+  ```Linux
+  python --version; pip --version
+  ```
+  After that, install necessary modules to the environment, type.
+  ```Linux
+  pip install numpy scipy cython matplotlib
+  ```
+  In the `CLASS` directory, go to the ‘python’ directory and execute the command:
   ```Linux
   python setup.py build
-  python setup.py install --user
+  python setup.py install
   ```
-  Checking if the steps above worked fine by typing
+  Checking if the steps above worked properly by compiling
   ```Linux
-  $ python
-  >>> from classy import Class
+  python -c "import classy; print(classy.__version__)"
   ```
-
 Monte Python
 ==================
 ### 1. Getting Monte Python
