@@ -163,6 +163,53 @@ the virtual environment by compiling.
   ```Linux
   python -c "import classy; print(classy.__version__)"
   ```
+### 5.Using `CLASS` on Jupyter Notebook
+  Firstly you have to install Jupyter Notebook.
+  ```Linux
+  pip install notebook
+  ```
+  To make sure that the path of Jupyter Notebook is in the created venv, type.
+  ```Linux
+  which jupyter
+  ```
+  If the Notebook is not in the right path, you may have follow this way:
+  ```Linux
+  pip install ipython ipykernel
+  ```
+  After installing `ipython` and `ipykernel`, run
+  ```Linux
+  ipython kernel install --user --name=<myvenv>
+  ```
+  and
+  ```Linux
+  python -m ipykernel install --user --name=<myvenv>
+  ```
+  Now the Jupyter Notebook should be in the right path. You can test it by
+typing (you probably have to restart the shell, and activate the venv again).
+  ```Linux
+  which jupyter
+  ```
+  If all thing going fine, to use the Jupyter Notebook, run
+  ```Linux
+  jupyter notebook
+  ```
+### (Optional) Creating the alias for the virtual environment 
+  You can create a command to activate the venv any directory by putting the
+following command in the file `.bashrc` or `.zshrc`. Firstly, open the `.bashrc` or `.zshrc` file by typing
+  ```Linux
+  vim ~/.bashrc
+  ```
+  or
+  ```Linux
+  vim ~/.zshrc
+  ```
+  (or you can use the text editor, nano, if you prefer). Then, put the command:
+  ```Linux
+  alias <your_prefer_name>="source $HOME/<path/to/myvenv>/bin/activate"
+  ```
+  Then, overwrite the file with `:wq` (in vim command mode), or `Ctr+O` (for nano).
+
+
 Monte Python
 ==================
 ### 1. Getting Monte Python
@@ -170,7 +217,7 @@ Monte Python
   ```Linux
   git clone https://github.com/brinckmann/montepython_public.git
   ```
-  You need the Python program version 2.7.x** or version 3.x**. Your Python must have ‘numpy‘ (version >= 1.4.1) and ‘Cython’. The last one is used to wrap CLASS in Python. \
+  You need the Python program version 2.7.x** or version 3.x**. Your Python must have ‘numpy‘ (version >= 1.4.1) and ‘Cython’. The last one is used to wrap `CLASS` in `Python`. \
   Optional: If you want to use the plotting capabilities of Monte Python fully, you also need the ‘scipy’, with interpolate, and ‘matplotlib’ modules. \
   After installation, go to the directory:
   ```Linux
@@ -180,9 +227,10 @@ Monte Python
   ```Linux
   cp default.conf.template default.conf
   ```
-  At minimum, the file `default.cof` needs one line:
+  At minimum, the file `default.cof` needs one line. \
+  ⚠️ **You need to replace `<path/to/your/class_public>` by your `class_public` installed directory path.**
   ```Linux
-  path['cosmo'] = path/to/your/class_public
+  path['cosmo'] = '<path/to/your/class_public>'
   ```
   Make sure that your `CLASS` directory has the same name as in the path.
   Now the code is installed. There are two main (optional) commands in `MontePython`: the first one is run, for running MCMC to generate chains, another one is info, for analysing chains. More information can be viewed by executing
@@ -193,15 +241,16 @@ Monte Python
   ```
   To test a small running, executing:
   ```Linux
-  path['cosmo'] = path/to/your/class_public
+  path['cosmo'] = '<path/to/your/class_public>'
   ```
+  ⚠️ **You need to replace `<path/to/your/class_public>` by your `class_public` installed directory path.** \
   To get running, type:
   ```Linux
-  python montepython/MontePython.py run -o test -p example.param
+  python montepython/MontePython.py run -o test -p input/example.param
   ```
   If the directory `test/` doesn’t exist, it will be created, and a run with the number of steps described in `example.param` will be started. To run a chain with more steps, one can type:
   ```Linux
-  python montepython/MontePython.py run -o test -p example.param -N 100
+  python montepython/MontePython.py run -o test -p input/example.param -N 100
   ```
   To analyse the chains, type
   ```Linux
@@ -216,9 +265,10 @@ Setting up Planck Likelihood
 ==================
   The Planck 2018 data can be found on the [Planck Legacy Archive](http://pla.esac.esa.int/pla/#home). The Planck Likelihood Code (plc) is based on a library called `clik`. It will be extracted, alongside several `clik` folders that contain the likelihoods. The code uses an auto installer device, called `waf`. \
 Here is the detail of the full installation.
-  Next, create a directory which you want to store Planck data, and go into that directory
+  Next, create a directory which you want to store Planck data, and go into that directory \
+  ⚠️ **You need to replace `<path/to/your/planck>` by your own name such as `planck`.**
   ```Linux
-  mkdir -p path/to/planck && cd $_
+  mkdir -p <path/to/planck> && cd $_
   ```
   Download the code and baseline data (will need 300 Mb of space)
   ```Linux
@@ -247,6 +297,7 @@ Here is the detail of the full installation.
   ```Linux
   source bin/clik_profile.sh
   ```
+  ### For MacOS
   Running on a z-shell, you will first need to create a .zsh version of the above file. This can be done in many ways, for example
   ```Linux
   cp bin/clik_profile.sh bin/clik_profile.zsh
@@ -257,12 +308,28 @@ Here is the detail of the full installation.
   ```
   You need to add
   ```Linux
-  source /path/to/planck/code/plc_3.0/plc-3.01/bin/clik_profile.sh
+  source </path/to/planck>/code/plc_3.0/plc-3.01/bin/clik_profile.sh
+  ```
+  ⚠️ **You need to replace `<path/to/your/planck>` by your own installed path.
+  to your `.bashrc`, and you should put it in your scripts for cluster computing. \
+  ### For Ubuntu
+  Running on a bash-shell, you will first need to create a .sh version of the above file. This can be done in many ways, for example
+  ```Linux
+  cp bin/clik_profile.sh bin/clik_profile.sh
+  sed -i 's/addvar PATH /PATH=$PATH:/g' bin/clik_profile.sh
+  sed -i 's/addvar PYTHONPATH /PYTHONPATH=$PYTHONPATH:/g' bin/clik_profile.sh
+  sed -i 's/addvar LD_LIBRARY_PATH/LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/g' bin/clik_profile.sh
+  source bin/clik_profile.sh
+  ```
+  You need to add
+  ```Linux
+  source </path/to/planck/>code/plc_3.0/plc-3.01/bin/clik_profile.sh
   ```
   to your `.shellrc` (or the `.zsh` to your `.zshrc` on a z-shell), and you should put it in your scripts for cluster computing. \
   After successfully installing Planck likelihoods, in MontePython configuration file, you will need to add
   ```Linux
-  path['clik'] = '/path/to/planck/code/plc_3.0/plc-3.01'
+  path['clik'] = '</path/to/planck/code/plc_3.0/plc-3.01>'
   ```
+⚠️ **You need to replace `<path/to/your/planck/code/plc_3.0/plc-3.01>` by your own installed path.\
   There are nine Planck 2018 likelihoods defined in *Monte Python*: 'Planck_highl_TT', 'Planck_highl_TT_lite', 'Planck_highl_TTTEEE', 'Planck_highl_TTTEEE_lite', 'Planck_lensing', 'Planck_lowl_TT', 'Planck_lowl_EE', 'Planck_lowl_EEBB', 'Planck_lowl_BB', as well as five sets of parameter files, bestfit files, and covmats.
 
