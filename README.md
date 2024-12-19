@@ -272,12 +272,12 @@ Here is the detail of the full installation.
   ```
   Download the code and baseline data (will need 300 Mb of space)
   ```Linux
-  wget -O COM_Likelihood_Code-v3.0_R3.01.tar.gz "http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Code-v3.0_R3.01.tar.gz"
-  wget -O COM_Likelihood_Data-baseline_R3.00.tar.gz  "http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz"
+wget -O COM_Likelihood_Code-v3.0_R3.10.tar.gz "http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Code-v3.0_R3.10.tar.gz"
+wget -O COM_Likelihood_Data-baseline_R3.00.tar.gz  "http://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz"
   ```
   Uncompress the code and the likelihood, and do some clean-up
   ```Linux
-  tar -xvzf COM_Likelihood_Code-v3.0_R3.01.tar.gz
+  tar -xvzf COM_Likelihood_Code-v3.0_R3.10.tar.gz
   tar -xvzf COM_Likelihood_Data-baseline_R3.00.tar.gz
   rm COM_Likelihood_*tar.gz
   ```
